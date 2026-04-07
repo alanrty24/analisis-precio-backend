@@ -50,3 +50,16 @@ def test_analizar_rechaza_formato_invalido() -> None:
     )
 
     assert response.status_code == 400
+
+
+def test_cors_preflight() -> None:
+    response = client.options(
+        "/analizar",
+        headers={
+            "Origin": "http://localhost:3000",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "*"

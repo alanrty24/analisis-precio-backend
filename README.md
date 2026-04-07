@@ -16,6 +16,11 @@ pip install -r requirements.txt
 uvicorn src.main:app --reload
 ```
 
+Variables utiles para frontend local:
+
+- CORS_ALLOW_ORIGINS=* para permitir pruebas desde cualquier origen
+- CORS_ALLOW_ORIGINS=http://localhost:3000,http://127.0.0.1:5173 para restringir a orígenes concretos
+
 ## Endpoint principal
 
 - POST /analizar
@@ -54,6 +59,7 @@ Alias soportados:
 - Archivo de infraestructura: render.yaml
 - Build command: pip install -r requirements.txt
 - Start command: uvicorn src.main:app --host 0.0.0.0 --port $PORT
+- Configura CORS_ALLOW_ORIGINS con los dominios reales del frontend separados por coma
 
 ## Tests
 

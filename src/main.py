@@ -4,6 +4,7 @@ from pathlib import Path
 
 import polars as pl
 from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
 	title="Price Optimizer API",
@@ -11,6 +12,13 @@ app = FastAPI(
 	version="0.1.0",
 )
 
+
+def _parse_cors_origins() -> list[str]:
+	raw_origins = os.getenv("CORS_ALLOW_ORIGINS", "*")
+	return [origin.strip() for origin in raw_origins.split(",") if origin.strip()]
+
+
+CORS_ALLOW_ORIGINS = _parse_cors_origins()
 SUPPORTED_EXTENSIONS = {".csv", ".xlsx"}
 MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "10"))
 MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
@@ -26,6 +34,14 @@ COLUMN_ALIASES = {
 	"precio": "precio_unitario",
 	"codigo": "codigo_producto",
 }
+
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=CORS_ALLOW_ORIGINS,
+	allow_credentials=False,
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
 
 
 def _normalize_columns(df: pl.DataFrame) -> pl.DataFrame:
