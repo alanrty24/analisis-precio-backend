@@ -1,6 +1,5 @@
 import io
 import os
-from datetime import datetime, timezone
 from pathlib import Path
 
 import polars as pl
@@ -90,8 +89,6 @@ async def analizar_precios(file: UploadFile = File(...)) -> list[dict[str, objec
 		df = _normalize_columns(df)
 		_validate_required_columns(df)
 
-		analysis_timestamp = datetime.now(timezone.utc).isoformat()
-
 		resultado = (
 			df.with_columns(
 				pl.col("precio_unitario").cast(pl.Float64, strict=False),
@@ -108,12 +105,11 @@ async def analizar_precios(file: UploadFile = File(...)) -> list[dict[str, objec
 			.sort(["codigo_producto", "precio_unitario", "nombre_proveedor"])
 			.unique(subset=["codigo_producto"], keep="first", maintain_order=True)
 			.select(
-				"codigo_producto",
-				"nombre_producto",
-				"nombre_proveedor",
-				"precio_unitario",
+				pl.col("codigo_producto").alias("codigoProducto"),
+				pl.col("nombre_producto").alias("nombreProducto"),
+				pl.col("nombre_proveedor").alias("nombreProveedor"),
+				pl.col("precio_unitario").alias("precioUnitario"),
 			)
-			.with_columns(pl.lit(analysis_timestamp).alias("analisis_timestamp"))
 		)
 
 		return resultado.to_dicts()

@@ -31,11 +31,16 @@ def test_analizar_csv_ok() -> None:
 
     assert len(data) == 2
 
-    por_codigo = {item["codigo_producto"]: item for item in data}
-    assert por_codigo["A1"]["precio_unitario"] == 8.0
-    assert por_codigo["A1"]["nombre_proveedor"] == "Proveedor 2"
-    assert por_codigo["B1"]["precio_unitario"] == 12.0
-    assert "analisis_timestamp" in por_codigo["A1"]
+    por_codigo = {item["codigoProducto"]: item for item in data}
+    assert por_codigo["A1"]["precioUnitario"] == 8.0
+    assert por_codigo["A1"]["nombreProveedor"] == "Proveedor 2"
+    assert por_codigo["B1"]["precioUnitario"] == 12.0
+    assert set(por_codigo["A1"].keys()) == {
+        "codigoProducto",
+        "nombreProducto",
+        "nombreProveedor",
+        "precioUnitario",
+    }
 
 
 def test_analizar_rechaza_formato_invalido() -> None:

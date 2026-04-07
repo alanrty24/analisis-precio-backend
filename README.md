@@ -21,6 +21,13 @@ uvicorn src.main:app --reload
 - POST /analizar
 - Form-data: file (csv o xlsx)
 
+Respuesta JSON por item:
+
+- codigoProducto
+- nombreProducto
+- nombreProveedor
+- precioUnitario
+
 Columnas esperadas:
 
 - codigo_producto
