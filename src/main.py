@@ -25,6 +25,7 @@ MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
 REQUIRED_COLUMNS = {
 	"codigo_producto",
 	"nombre_producto",
+	"nombre_laboratorio",
 	"nombre_proveedor",
 	"precio_unitario",
 }
@@ -32,6 +33,7 @@ COLUMN_ALIASES = {
 	"descripcion": "nombre_producto",
 	"proveedor": "nombre_proveedor",
 	"precio": "precio_unitario",
+	"laboratorio": "nombre_laboratorio",
 	"codigo": "codigo_producto",
 }
 
@@ -111,6 +113,7 @@ async def analizar_precios(file: UploadFile = File(...)) -> list[dict[str, objec
 				pl.col("codigo_producto").cast(pl.Utf8, strict=False).str.strip_chars(),
 				pl.col("nombre_producto").cast(pl.Utf8, strict=False).str.strip_chars(),
 				pl.col("nombre_proveedor").cast(pl.Utf8, strict=False).str.strip_chars(),
+				pl.col("nombre_laboratorio").cast(pl.Utf8, strict=False).str.strip_chars(),
 			)
 			.filter(
 				pl.col("precio_unitario").is_not_null()
@@ -124,6 +127,7 @@ async def analizar_precios(file: UploadFile = File(...)) -> list[dict[str, objec
 				pl.col("codigo_producto").alias("codigoProducto"),
 				pl.col("nombre_producto").alias("nombreProducto"),
 				pl.col("nombre_proveedor").alias("nombreProveedor"),
+				pl.col("nombre_laboratorio").alias("nombreLaboratorio"),
 				pl.col("precio_unitario").alias("precioUnitario"),
 			)
 		)
