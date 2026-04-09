@@ -236,6 +236,77 @@ def test_analizar_dos_excels_mismo_codigo_barra_distinta_drogueria() -> None:
     assert data[0]["mejor_precio"] == 8.0
 
 
+def test_analizar_dos_excels_con_columnas_extra_distintas() -> None:
+    workbook_1 = Workbook()
+    ws_1 = workbook_1.active
+    ws_1.append(["Drogueria A"])
+    ws_1.append(
+        [
+            "barra",
+            "codigo",
+            "descripcion",
+            "stock",
+            "laboratorio",
+            "precio",
+        ]
+    )
+    ws_1.append(["001234", "A-1", "Producto X", 5, "Lab Uno", 10])
+    ws_1_bytes = BytesIO()
+    workbook_1.save(ws_1_bytes)
+    ws_1_bytes.seek(0)
+
+    workbook_2 = Workbook()
+    ws_2 = workbook_2.active
+    ws_2.append(["Drogueria B"])
+    ws_2.append(
+        [
+            "barra",
+            "codigo",
+            "descripcion",
+            "stock",
+            "laboratorio",
+            "precio",
+            "categoria",
+            "campaign",
+            "expiration",
+        ]
+    )
+    ws_2.append(["1234", "B-9", "Producto X", 7, "Lab Uno", 7, "Med", "[]", False])
+    ws_2_bytes = BytesIO()
+    workbook_2.save(ws_2_bytes)
+    ws_2_bytes.seek(0)
+
+    response = client.post(
+        "/analizar",
+        files=[
+            (
+                "files",
+                (
+                    "drogueria_a.xlsx",
+                    ws_1_bytes.getvalue(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ),
+            ),
+            (
+                "files",
+                (
+                    "drogueria_b.xlsx",
+                    ws_2_bytes.getvalue(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ),
+            ),
+        ],
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert len(data) == 1
+    assert data[0]["codigo_barra"] == "1234"
+    assert data[0]["codigo_interno_proveedor"] == "B-9"
+    assert data[0]["proveedor_ganador"] == "Drogueria B"
+    assert data[0]["mejor_precio"] == 7.0
+
+
 def test_analizar_xlsx_con_codigo_producto_mixto_no_falla() -> None:
     workbook = Workbook()
     worksheet = workbook.active

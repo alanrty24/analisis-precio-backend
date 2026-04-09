@@ -33,6 +33,15 @@ REQUIRED_COLUMNS = {
 	"unidades_existentes",
 	"precio_unitario",
 }
+BASE_PROCESSING_COLUMNS = [
+	"codigo_barra",
+	"codigo_producto",
+	"nombre_producto",
+	"nombre_laboratorio",
+	"unidades_existentes",
+	"precio_unitario",
+	"nombre_proveedor",
+]
 COLUMN_ALIASES = {
 	"barra": "codigo_barra",
 	"barcode": "codigo_barra",
@@ -265,6 +274,7 @@ async def analizar_precios(
 			df = _normalize_columns(df)
 			df = _ensure_provider_column(df, provider_name)
 			_validate_required_columns(df)
+			df = df.select(BASE_PROCESSING_COLUMNS)
 			dfs.append(df)
 
 		df = pl.concat(dfs, how="vertical_relaxed")
