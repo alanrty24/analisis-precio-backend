@@ -302,6 +302,7 @@ async def analizar_precios(
 				pl.col("codigo_barra"),
 				pl.col("codigo_producto").alias("codigo_interno_proveedor"),
 				pl.col("nombre_producto"),
+				pl.col("nombre_laboratorio"),
 				pl.col("precio_unitario").alias("mejor_precio"),
 				pl.col("nombre_proveedor").alias("proveedor_ganador"),
 				pl.col("unidades_existentes").alias("unidades_disponibles"),

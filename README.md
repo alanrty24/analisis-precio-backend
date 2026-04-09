@@ -33,6 +33,7 @@ Respuesta JSON por item:
 - codigo_barra
 - codigo_interno_proveedor
 - nombre_producto
+- nombre_laboratorio
 - mejor_precio
 - proveedor_ganador
 - unidades_disponibles
@@ -85,6 +86,7 @@ Alias soportados:
 		"codigo_barra": "7701234567890",
 		"codigo_interno_proveedor": "ABC-001",
 		"nombre_producto": "Acetaminofen 500mg",
+		"nombre_laboratorio": "Lab Norte",
 		"mejor_precio": 12.5,
 		"proveedor_ganador": "Drogueria Central",
 		"unidades_disponibles": 48,

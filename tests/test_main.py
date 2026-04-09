@@ -37,6 +37,7 @@ def test_analizar_csv_consolida_por_codigo_barra() -> None:
 
     por_barra = {item["codigo_barra"]: item for item in data}
     assert por_barra["12345"]["codigo_interno_proveedor"] == "P2"
+    assert por_barra["12345"]["nombre_laboratorio"] == "Lab A"
     assert por_barra["12345"]["mejor_precio"] == 9.0
     assert por_barra["12345"]["proveedor_ganador"] == "Drogueria Central"
     assert por_barra["12345"]["unidades_disponibles"] == 18
